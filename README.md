@@ -141,3 +141,5 @@ Všechny znalosti jsou čerpány z přednášek [Lineární algebra 1](https://k
 ## Feedback
 
 Pokud jste našli chybu, nebo máte nápad na vylepšení, vytvořte issue na [GitHubu](https://github.com/Roiqk7/nazorna-gausovka).
+
+*Poznámka pod čarou - pro historii úprav viz [Gitlab](https://gitlab.mff.cuni.cz/sevecep/nazorna-gausovka)*
