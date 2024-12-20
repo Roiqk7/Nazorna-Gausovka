@@ -2,6 +2,8 @@
 
 Program na vizualizaci řešení soustavy lineárních rovnic pomocí [Gaussovy eliminace](https://cs.wikipedia.org/wiki/Gaussova_eliminační_metoda).
 
+*Pro historii úprav viz [Gitlab](https://gitlab.mff.cuni.cz/sevecep/nazorna-gausovka)*
+
 ## Závislosti
 
 - [Python v3.13.0](https://www.python.org/downloads/)
@@ -141,5 +143,3 @@ Všechny znalosti jsou čerpány z přednášek [Lineární algebra 1](https://k
 ## Feedback
 
 Pokud jste našli chybu, nebo máte nápad na vylepšení, vytvořte issue na [GitHubu](https://github.com/Roiqk7/nazorna-gausovka).
-
-*Poznámka pod čarou - pro historii úprav viz [Gitlab](https://gitlab.mff.cuni.cz/sevecep/nazorna-gausovka)*
