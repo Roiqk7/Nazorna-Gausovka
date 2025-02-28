@@ -20,7 +20,7 @@ pip install -r docs/zavislosti.txt
 
 Naklonujte si tento repozitář:
 
-[GitLab](https://gitlab.mff.cuni.cz/sevecep/nazorna-gausovka)
+[GitLab](https://gitlab.mff.cuni.cz/sevecep/nazorna-gausovka) (doporučeno)
 ```bash
 git clone https://gitlab.mff.cuni.cz/sevecep/nazorna-gausovka
 ```
