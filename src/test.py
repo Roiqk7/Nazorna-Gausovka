@@ -499,6 +499,12 @@ def testujZpracovaniArgumentu():
                 uspesneTesty += 1
         testyCelkem += 1
 
+        skutecne = zpracujMatlabMatici("[1.5 2 3; 4 5.5 6; 7 8 9.5]")
+        ocekavane = Matice(3, 2, [1.5, 2, 4, 5.5, 7, 8], Matice(3, 1, [3, 6, 9.5]))
+        if test(ocekavane, skutecne, f"Zpracování MatLab matice {testyCelkem} (desetinné číslo)"):
+                uspesneTesty += 1
+        testyCelkem += 1
+
         # Matlab matice (divný vstup)
         skutecne = zpracujMatlabMatici("[1, 2, 3; 4, 5, 6; 7, 8, 9]")
         ocekavane = Matice(3, 2, [1, 2, 4, 5, 7, 8], Matice(3, 1, [3, 6, 9]))
@@ -515,6 +521,12 @@ def testujZpracovaniArgumentu():
         skutecne = zpracujMatlabMatici("[1,2,3;4,5,6;7,8,9")
         ocekavane = Matice(3, 2, [1, 2, 4, 5, 7, 8], Matice(3, 1, [3, 6, 9]))
         if test(ocekavane, skutecne, f"Zpracování MatLab matice {testyCelkem} (čárky, bez mezer, neuzavřené hranaté závorky)"):
+                uspesneTesty += 1
+        testyCelkem += 1
+
+        skutecne = zpracujMatlabMatici("[1, 2, 3; 4, 5, 6; 7, 8, 9.5]")
+        ocekavane = Matice(3, 2, [1, 2, 4, 5, 7, 8], Matice(3, 1, [3, 6, 9.5]))
+        if test(ocekavane, skutecne, f"Zpracování MatLab matice {testyCelkem} (čárky, desetinné číslo)"):
                 uspesneTesty += 1
         testyCelkem += 1
 

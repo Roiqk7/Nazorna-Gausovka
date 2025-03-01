@@ -67,6 +67,16 @@ def zformatujCislo(cislo, znamenko = False, end = "\n", doplnitDo = 0):
 
         return f"{zformatovaneCislo}{end}"
 
+def zformatujPromenou(index, promennychCelkem):
+        """
+        Dosadí hezkou proměnnou.
+
+        @param index: index proměnné
+        @param promennychCelkem: celkový počet proměnných
+        """
+        promenne = ['x', 'y', 'z'] if promennychCelkem <= 3 else [f"x{i + 1}" for i in range(promennychCelkem)]
+        return promenne[index]
+
 def vytiskniCislo(cislo, znamenko = False, end = "\n", doplnitDo = 0, barevne = False):
         """
         Vytiskne zformátované číslo do konzole
@@ -82,17 +92,16 @@ def vytiskniCislo(cislo, znamenko = False, end = "\n", doplnitDo = 0, barevne = 
         else:
                 print(zformatovaneCislo, end="")
 
-def vytiskniPromennou(hodnota, index, promenychCelkem, znamenko = False, end = "\n"):
+def vytiskniPromennou(hodnota, index, promennychCelkem, znamenko = False, end = "\n"):
         """
         Vytiskne proměnnou do konzole
 
         @param hodnota: hodnota proměnné
         @param index: index proměnné
-        @param promenychCelkem: celkový počet proměnných
+        @param promennychCelkem: celkový počet proměnných
         @param end: konec řádku
         """
-        promene = ['x', 'y', 'z'] if promenychCelkem <= 3 else [f"x{i + 1}" for i in range(promenychCelkem)]
-        promena = promene[index]
+        promena = zformatujPromenou(index, promennychCelkem)
         # Pokud je koeficient 1 nebo -1, vypíšeme pouze proměnnou (pro hezčí výstup)
         if isclose(abs(hodnota), 1, abs_tol=PRAH_ROVNOSTI_FLOATU):
                 zformatovaneZnamenko = zformatujZnamenko(hodnota, znamenko)
@@ -189,14 +198,14 @@ def pockej(miraTisku = MiraTisku.NIZKA, hladinaTisku = MiraTisku.NIZKA):
                 input(f"{SEDA}Stiskněte enter pro pokračování...")
                 print()
 
-def zformatujCisloProLatexVypis(cislo, znamenko = False, promenychCelkem = 0, promenna = -1):
+def zformatujCisloProLatexVypis(cislo, znamenko = False, promennychCelkem = 0, index = -1):
         """
         Zformátuje číslo pro výpis do latexu
 
         @param cislo: číslo
         @param znamenko: zda se má vypsat znaménko speciálně
-        @param promenychCelkem: celkový počet proměnných
-        @param promenna: index proměnné
+        @param promennychCelkem: celkový počet proměnných
+        @param index: index proměnné
 
         @return: formátované číslo pro výpis do latexu
         """
@@ -208,9 +217,8 @@ def zformatujCisloProLatexVypis(cislo, znamenko = False, promenychCelkem = 0, pr
         cislo = abs(cislo)
 
         # Proměnná
-        if promenna != -1:
-                promene = ['x', 'y', 'z'] if promenychCelkem <= 3 else [f"x_{i + 1}" for i in range(promenychCelkem)]
-                promena = promene[promenna]
+        if index != -1:
+                promena = zformatujPromenou(index, promennychCelkem)
                 if cislo == 1:
                         return f"{zformatovaneZnamenko}{promena}"
                 elif isinstance(cislo, Fraction):

@@ -19,7 +19,7 @@
 Uživatel spustí funkci `main` ze souboru `main.py` se vstupními argumenty. Argumenty se předají funkci `zpracujArgumenty` ze souboru `zpracovaniVstupu.py`, která zpracuje vstupní argumenty a rozhodne o dalším postupu programu. Další průběh programu závisí na uživatelských argumentech. Zde je jednoduchý diagram průběhu programu:
 
 ```
-main -> zpracujArgumenty -> 1. Matice? -> zpracuj_Matici -> GaussovaEliminace -> zpetnaSubstituce -> 1. Uložit řešení? -> ulozReseniDoSouboru
+main -> zpracujArgumenty -> 1. Matice? -> zpracuj_Matici -> GaussovaEliminace -> 1. Je soustava řešitelná? -> zpetnaSubstituce -> 1. Uložit řešení? -> ulozReseniDoSouboru
                          -> 2. Spustit testy? -> testuj
                          -> 3. Teorie? -> teorieMain
                          -> 4. Ukázka? -> mainUkazka
@@ -43,6 +43,18 @@ Výběr nejdůležitějších funkcí:
 ### GaussovaEliminace(matice, miraTisku = MiraTisku.ZADNA)
 
 Jedná se o implementaci algoritmu Gaussovy eliminace ze skript pana prof. Milana Hladíka. Já jsem funkci doplnil o naučné výpisy, které ovšem nijak nemění základní logiku. Co ovšem logiku mění je výběr pivota, kde se používá tvz. `hezkost pivota`, která je určena pomocnou funkcí `jeHezkyPivot(pivot)`.
+
+```
+1. i = j = 0
+2. Pokud A[i][j] = 0 pro všechna k >= i a l >= j, pak končíme (detekce nulové podmatice)
+3. j = min{l; l >= j, A[k][l] != 0 pro nějaké k >= i} (přeskočíme nulové podsloupečky)
+4. Urči k takové, že A[k][j] != 0, k >= i a vyměň řádky i a k (na pozici pivota A[i][j] je nenulový prvek)*
+4.5. Pokud je pivot ošklivý, vytvoříme z něj 1
+5. Pro všechna k > i polož A[k] = A[k] - A[k][j]/A[i][j] * A[i] (2. elementární úprava)
+6. i = i + 1, j = j + 1 a pokračujeme od kroku 2
+
+* Tento krok je v algoritmu odlišný a při výběru pivota uvažujeme tvz. "hezkost" pivota
+```
 
 ### zpetnaSubstituce(matice, miraTisku = MiraTisku.ZADNA)
 

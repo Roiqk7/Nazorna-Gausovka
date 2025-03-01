@@ -5,7 +5,6 @@ Definuje funkce pro zpracování argumentů z konzole
 """
 
 from gauss import reseniSoustavy
-from matice import Matice
 from parsovani import zpracujMatlabMatici, latexNaMatici, reseniNaLatex
 from ukazka import mainUkazka
 from teorie import teorieMain
@@ -13,20 +12,23 @@ from test import testuj
 from tisk import MiraTisku, vytiskniChybu, vytiskniUspech
 import argparse
 import os
-import numpy as np
 
 # Vytvoření parseru pro argumenty v konzoli
 parser = argparse.ArgumentParser()
 
 # Definice argumentů
+defaultNacti = os.path.join("data", "vstup.tex")
+defaultUloz = os.path.join("data", "vystup.tex")
+
+# Definice argumentů
 parser.add_argument("--vstup", help="Soustava lineárních rovnic ve formátu matlabu")
-parser.add_argument("--nacti", help="Název souboru se vstupními daty")
-parser.add_argument("--uloz", help="Název souboru pro uložení výstupních dat")
+parser.add_argument("--nacti", help="Název souboru se vstupními daty", nargs="?", const=defaultNacti, default=None)
+parser.add_argument("--uloz", help="Název souboru pro uložení výstupních dat", nargs="?", const=defaultUloz, default=None)
 parser.add_argument("--tisk", help="Míra tisku (0-3), 0 je žádné, 3 je vše", type=int)
-parser.add_argument("--ukazka", help="Předvede program na ukázkovém vstupu", action='store_true')
-parser.add_argument("--teorie", help="Zobrazí teorii", action='store_true')
-parser.add_argument("--test", help="Spustí testy", action='store_true')
-parser.add_argument("--pomoc", help="Zobrazí nápovědu", action='store_true')
+parser.add_argument("--ukazka", help="Předvede program na ukázkovém vstupu", action="store_true")
+parser.add_argument("--teorie", help="Zobrazí teorii", action="store_true")
+parser.add_argument("--test", help="Spustí testy", action="store_true")
+parser.add_argument("--pomoc", help="Zobrazí nápovědu", action="store_true")
 
 def zpracujArgumenty(argumenty):
         """
@@ -35,7 +37,7 @@ def zpracujArgumenty(argumenty):
         @param argumenty: argumenty z konzole
         """
         reseni = None
-        if argumenty.tisk:
+        if argumenty.tisk != None: # None tu je jelikož argumenty.tisk samo o sobě nestačí (jelikož pro 0 to bude vždy False)
                 if argumenty.tisk == 0:
                         tisk = MiraTisku.ZADNA
                 elif argumenty.tisk == 1:
@@ -58,6 +60,9 @@ def zpracujArgumenty(argumenty):
                 vytiskniChybu("Nepodařilo se načíst vstupní data. Zkontrolujte formát vstupu. (viz --pomoc)")
                 raise ValueError("Nepodařilo se načíst vstupní data. Zkontrolujte formát vstupu. (viz --pomoc)")
         if argumenty.uloz:
+                if not (argumenty.vstup or argumenty.nacti):
+                        vytiskniChybu("Nebyla poskytnuta vstupní data pro parametr --uloz.")
+                        raise ValueError("Nebyla poskytnuta vstupní data pro parametr --uloz.")
                 ulozReseniDoSouboru(argumenty.uloz, reseni)
         if argumenty.test:
                 testuj()
@@ -78,11 +83,15 @@ def nactiMaticiZeSouboru(soubor):
         """
         if not os.path.exists(soubor):
                 vytiskniChybu(f"Nepodařilo se najít soubor {soubor} pro načtení vstupních dat.")
-                soubor = "data/vstup.tex"
+                soubor = defaultNacti
                 print(f"Vstupní data budou načtena ze souboru {soubor}.")
         try:
                 with open(soubor, "r") as f:
                         vstup = f.read()
+                # Prázdný soubor
+                if not vstup.strip():
+                        vytiskniChybu(f"Soubor {soubor} je prázdný.")
+                        raise ValueError(f"Soubor {soubor} je prázdný.")
                 return latexNaMatici(vstup)
         except Exception as e:
                 vytiskniChybu(f"Nepodařilo se načíst vstupní data ze souboru {soubor}. Zkontrolujte formát. (viz --pomoc)")
@@ -97,7 +106,7 @@ def ulozReseniDoSouboru(soubor, reseni):
         """
         if not os.path.exists(soubor):
                 vytiskniChybu(f"Nepodařilo se najít soubor {soubor} pro uložení výstupních dat.")
-                soubor = "data/vystup.tex"
+                soubor = defaultUloz
                 print(f"Výstupní data budou uložena do souboru {soubor}.")
         try:
                 with open(soubor, "w") as f:
@@ -127,12 +136,12 @@ def pomoc():
         print("(*) Pro formát vstupu a výstupu viz níže sekci 'Formát vstupu a výstupu'")
         print("Příklady spuštění:")
         print("\t> python3 src/main.py --vstup=\"[1 3 5; 2 4 6; 7 8 10]\" --tisk=3")
-        print("\t> python3 src/main.py --nacti=\"soubor.txt\" --uloz=\"vystup.txt\" --tisk=2")
+        print("\t> python3 src/main.py --nacti=\"vstup.txt\" --uloz=\"vystup.txt\" --tisk=2")
         print("\t> python3 src/main.py --teorie")
         print("Formát vstupu a výstupu:")
         print("\t> parametr --vstup očekává matici ve formátu matlabu např.: [1 3 5; 2 4 6; 7 8 10]")
-        print("\t> parametr --nacti očekává soubor s maticí ve formátu LaTeXu")
-        print("\t> parametr --uloz uloží výstup do souboru ve formátu LaTeXu")
+        print("\t> parametr --nacti očekává cestu k souboru s maticí ve formátu LaTeXu")
+        print("\t> parametr --uloz očekává cestu k souboru, ve kterém na uložit výsledek ve formátu LaTeXu")
         print("Závislosti:")
         print("\t> Program je napsán v Pythonu 3.13.0")
         print("\t> Použité externí knihovny: colorama, numpy")
@@ -143,6 +152,6 @@ def pomoc():
         print("\t> Pokud chcete zkontrolovat, zda program funguje správně, spusťte testy (--test).")
         print("Feedback:")
         print("\t> Pokud jste našli chybu, nebo máte nápad na vylepšení, vytvořte issue na GitHubu.")
+        print("\t> GitLab: https://gitlab.mff.cuni.cz/sevecep/nazorna-gausovka (aktuálnější)")
         print("\t> GitHub: https://github.com/Roiqk7/nazorna-gausovka")
-        print("\t> GitLab: https://gitlab.mff.cuni.cz/sevecep/nazorna-gausovka")
         print("Více informací naleznete v README.md")

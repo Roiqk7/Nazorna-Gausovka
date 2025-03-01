@@ -1,7 +1,7 @@
 """ 
 Datum: 30. 11. 2024
 
-Funkce pro řešení soustavy rovnic
+Funkce pro řešení soustavy rovnic (nejen Gaussovka, název je trochu zavádějící)
 """
 
 from vektor import Vektor
@@ -125,6 +125,7 @@ def zpetnaSubstituce(odstupnovanaMatice, miraTisku = MiraTisku.ZADNA):
 
         Algoritmus:
         0. Spočítáme hodnost matice a zjistíme, zda je soustava řešitelná
+        1. Pokud není, skončíme
         2. Najdeme pivoty
         3. Pro každého pivota od zadu:
                 1) Vytvoříme rovnici pro i-tého pivota
@@ -150,7 +151,7 @@ def zpetnaSubstituce(odstupnovanaMatice, miraTisku = MiraTisku.ZADNA):
         vytiskni("Zároveň budeme využívat již spočítaných proměnných a ty budeme do rovnic substituovat.\n", miraTisku, MiraTisku.MEGA)
         reseni = [0] * hodnost
         vyresenychPromennych = 0
-        # Proměnné x1, x2, ..., xR (R = hodnost matice)v
+        # Proměnné x1, x2, ..., xR (R = hodnost matice)
         for i in reversed(range(hodnost)):
                 # Získáme rovnici
                 vektor = gp.vytvorRovnici(odstupnovanaMatice, i, pozicePivotu)
